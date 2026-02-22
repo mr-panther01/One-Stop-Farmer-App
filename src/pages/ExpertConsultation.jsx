@@ -9,7 +9,7 @@ import {
   Send
 } from 'lucide-react';
 
-const ExpertConsultation = () => {
+const ExpertConsultation = ({ userName }) => {
   const [selectedExpert, setSelectedExpert] = useState(null);
 
   const experts = [
@@ -111,7 +111,7 @@ const ExpertConsultation = () => {
                       <p>Consultation started with {selectedExpert.name}</p>
                    </div>
                    <div className="message expert">
-                      <p>Namaste Rajesh ji! I've reviewed your recent crop scans. How can I help you today?</p>
+                      <p>Namaste {userName?.split(' ')[0] || 'Farmer'} ji! I've reviewed your recent crop scans. How can I help you today?</p>
                       <span className="time">10:02 AM</span>
                    </div>
                 </div>

@@ -8,7 +8,11 @@ import {
   Plus
 } from 'lucide-react';
 
-const Community = () => {
+const Community = ({ userName }) => {
+  const getInitials = (name) => {
+    return name?.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2) || 'F';
+  };
+
   const [posts, setPosts] = useState([
     {
       id: 1,
@@ -55,8 +59,8 @@ const Community = () => {
           {/* Create Post */}
           <div className="create-post glass-card">
              <div className="user-input">
-                <div className="avatar">RK</div>
-                <input type="text" placeholder="Share your experience or ask a question..." />
+                <div className="avatar">{getInitials(userName)}</div>
+                <input type="text" placeholder={`What's on your mind, ${userName?.split(' ')[0] || 'Farmer'}?`} />
              </div>
              <div className="post-actions">
                 <button className="action-item"><ImageIcon size={18} /> Photo</button>

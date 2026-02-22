@@ -8,13 +8,21 @@ import {
   ChevronRight,
   AlertTriangle,
   MapPin,
-  Loader2
+  Loader2,
+  TrendingUp,
+  TrendingDown
 } from 'lucide-react';
 
-const Dashboard = () => {
+const Dashboard = ({ userName, setActiveTab }) => {
   const [weatherData, setWeatherData] = useState(null);
   const [locationName, setLocationName] = useState('Detecting...');
   const [loadingWeather, setLoadingWeather] = useState(true);
+
+  const [mandiPrices, setMandiPrices] = useState([
+    { crop: 'Wheat (Gehun)', price: '₹2,450', change: '+₹25', trend: 'up' },
+    { crop: 'Tomato (Tamatar)', price: '₹1,200', change: '-₹40', trend: 'down' },
+    { crop: 'Onion (Pyaz)', price: '₹2,100', change: '+₹110', trend: 'up' },
+  ]);
 
   const fetchDashboardWeather = async (lat, lon) => {
     try {
@@ -87,12 +95,6 @@ const Dashboard = () => {
     { id: 3, text: 'Fertilizer application due for Rice', type: 'Fertilization', time: 'Tomorrow' },
   ];
 
-  const mandiPrices = [
-    { crop: 'Wheat (Gehun)', price: '₹2,450', change: '+₹25', trend: 'up' },
-    { crop: 'Tomato (Tamatar)', price: '₹1,200', change: '-₹40', trend: 'down' },
-    { crop: 'Onion (Pyaz)', price: '₹2,100', change: '+₹110', trend: 'up' },
-  ];
-
   return (
     <div className="dashboard-page animate-fade-in">
       {/* Weather Banner */}
@@ -124,7 +126,7 @@ const Dashboard = () => {
             </div>
           )}
 
-          <h1>Good Morning, Rajesh!</h1>
+          <h1>Good Morning, {userName || 'Farmer'}!</h1>
           <p>Your crops in <strong>{locationName}</strong> are looking healthy. Here's your daily summary.</p>
         </div>
       </section>
@@ -151,8 +153,10 @@ const Dashboard = () => {
         {/* Mandi Prices */}
         <section className="mandi-section glass-card">
           <div className="section-header">
-            <h3>Mandi Rates</h3>
-            <button className="view-all">View All <ChevronRight size={16} /></button>
+            <h3>Small Mandi Update</h3>
+            <button className="view-all" onClick={() => setActiveTab('mandi')}>
+              Market Prices <ChevronRight size={16} />
+            </button>
           </div>
           <div className="mandi-list">
             {mandiPrices.map((item, idx) => (
@@ -163,7 +167,10 @@ const Dashboard = () => {
                 </div>
                 <div className="price-info">
                   <span className="current-price">{item.price}</span>
-                  <span className={`price-change ${item.trend}`}>{item.change}</span>
+                  <span className={`price-change ${item.trend}`}>
+                    {item.trend === 'up' ? <TrendingUp size={12} /> : <TrendingDown size={12} />}
+                    {item.change}
+                  </span>
                 </div>
               </div>
             ))}
@@ -195,7 +202,7 @@ const Dashboard = () => {
           <div className="ai-cta-content">
             <h3>Detect Crop Diseases</h3>
             <p>Upload a photo of your crop and our AI will diagnose the issue instantly.</p>
-            <button className="premium-btn">Start Diagnosis</button>
+            <button className="premium-btn" onClick={() => setActiveTab('disease')}>Start Diagnosis</button>
           </div>
         </section>
       </div>
@@ -333,6 +340,10 @@ const Dashboard = () => {
         .price-change {
           font-size: 0.75rem;
           font-weight: 600;
+          display: flex;
+          align-items: center;
+          gap: 4px;
+          justify-content: flex-end;
         }
         .price-change.up { color: #16a34a; }
         .price-change.down { color: #dc2626; }
